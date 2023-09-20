@@ -1,0 +1,1 @@
+from hastur.dice_utils.RollResult import RollResult
