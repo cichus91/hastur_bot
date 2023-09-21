@@ -14,20 +14,18 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 token = dotenv.dotenv_values(dotenv_path="./environ/.env")['TOKEN']
 
-console_handler = logging.StreamHandler()
-file_handler = logging.FileHandler(filename="discord.log", encoding="utf-8", mode="w")
-
-logger = logging.getLogger("discord_bot")
-logger.addHandler(console_handler)
-logger.addHandler(file_handler)
-bot.logger = logger
-
+discord.utils.setup_logging()
 
 @bot.event
 async def on_ready():
-    bot.logger.info(f'Bot {bot.user.name} ready to work!')
+    logging.info(f'Bot {bot.user.name} ready to work!')
     await bot.change_presence(activity=discord.Game("No game loaded!"))
 
+@bot.event
+async def on_command_error(ctx, error):
+    logging.error(error)
+    logging.error(type(error))
+    await ctx.send("Something went wrong")
 
 # @bot.event
 # async def on_command_error(ctx, error):
@@ -43,10 +41,10 @@ async def load_cogs() -> None:
             extention = file[:-3]
             try:
                 await bot.load_extension(f"cogs.{extention}")
-                bot.logger.info(f"Loaded extension {extention}")
+                logging.info(f"Loaded extension {extention}")
             except Exception as e:
                 exception = f"{type(e).__name__}"
-                bot.logger.error(f"Failed to load extention {extention} \n {exception}")
+                logging.error(f"Failed to load extention {extention} \n {exception}")
     # await bot.load_extension("cogs.basic_rpg_commands")
 
 asyncio.run(load_cogs())

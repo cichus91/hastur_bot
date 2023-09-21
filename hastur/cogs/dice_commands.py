@@ -4,6 +4,7 @@ import discord
 from enum import Enum
 from discord import Colour
 from discord.ext import commands
+from discord.ext.commands import MissingRequiredArgument
 from hastur.dice_utils.RollEndpoint import RollEndpoint
 
 
@@ -38,9 +39,9 @@ class RpgCommands(commands.Cog):
 
     @commands.command(name="set_game")
     async def dice_settings(self, ctx, game_name):
+        #todo zmienic dzialanie tej metody, bo wpisanie blednej zwraca None
         self.game = game_name
         await ctx.send(f"Gra zmieniona na {game_name}")
-
 
     @commands.command(name="check")
     async def check_settings(self, ctx):

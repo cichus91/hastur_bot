@@ -14,3 +14,5 @@ class RollContext:
                 return TrophyDarkStrategy()
             case GamesEnum.STANDARD.value:
                 return StandardRollStrategy()
+            case _:
+                return StandardRollStrategy()
