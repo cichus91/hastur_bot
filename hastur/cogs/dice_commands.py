@@ -24,12 +24,12 @@ class RpgCommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.game = "Standard"
+        self.roll_controller = RollController()
 
 
     @commands.command(name="roll")
     async def standard_roll(self, ctx, dice_amount=1, dice_type=6):
-        roll_controller = RollController()
-        roll_result_message = roll_controller.get_roll_message(dice_amount=dice_amount,
+        roll_result_message = self.roll_controller.get_roll_message(dice_amount=dice_amount,
                                                               dice_type=dice_type,
                                                               author=ctx.author.display_name,
                                                               game=self.game)
@@ -39,9 +39,9 @@ class RpgCommands(commands.Cog):
 
     @commands.command(name="set_game")
     async def dice_settings(self, ctx, game_name):
-        #todo zmienic dzialanie tej metody, bo wpisanie blednej zwraca None
-        self.game = game_name
-        await ctx.send(f"Gra zmieniona na {game_name}")
+        response = self.roll_controller.set_game(game_name)
+        self.game = response.get("game")
+        await ctx.send(response.get("message"))
 
     @commands.command(name="check")
     async def check_settings(self, ctx):
