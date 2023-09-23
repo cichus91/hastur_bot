@@ -1,0 +1,18 @@
+# IDE
+.idea
+.vscode
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Logs
+*.log
+
+# Env/Virtual env
+environ
+.env/
+env/
+.venv/
+venv
+
