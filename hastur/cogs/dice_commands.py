@@ -5,19 +5,18 @@ from enum import Enum
 from discord import Colour
 from discord.ext import commands
 from discord.ext.commands import MissingRequiredArgument
-from hastur.dice_utils.RollEndpoint import RollEndpoint
+from hastur.dice_utils.RollController import RollController
 
 
-class DiceButton(discord.ui.Button):
-
-    def setup(self, data):
-        self.label = data['label']
-        self.custom_id = data['custom_id']
-        self.style = data['style']
-
-
-    async def callback(self, interaction: discord.Interaction):
-        await self.view.roll_dice(interaction)
+# class DiceButton(discord.ui.Button):
+#
+#     def setup(self, data):
+#         self.label = data['label']
+#         self.custom_id = data['custom_id']
+#         self.style = data['style']
+#
+#     async def callback(self, interaction: discord.Interaction):
+#         await self.view.roll_dice(interaction)
 
 
 class RpgCommands(commands.Cog):
@@ -29,7 +28,8 @@ class RpgCommands(commands.Cog):
 
     @commands.command(name="roll")
     async def standard_roll(self, ctx, dice_amount=1, dice_type=6):
-        roll_result_message = RollEndpoint().get_roll_message(dice_amount=dice_amount,
+        roll_controller = RollController()
+        roll_result_message = roll_controller.get_roll_message(dice_amount=dice_amount,
                                                               dice_type=dice_type,
                                                               author=ctx.author.display_name,
                                                               game=self.game)
