@@ -33,4 +33,7 @@ class HasturBot(commands.Bot):
 
     async def on_command_error(self, ctx, err) -> None:
         self._logger.error(f"Command error - {type(err)}: {err}")
-        await ctx.send("Something went wrong")
+        if isinstance(err, discord.ext.commands.UserInputError):
+            await ctx.send(embed=discord.Embed(title="ERROR", description="Podano błędną wartość"))
+        else:
+            await ctx.send("Something went wrong")
