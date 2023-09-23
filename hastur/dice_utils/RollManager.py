@@ -1,5 +1,7 @@
 import discord
 import logging
+
+from discord.ext.commands import BadArgument
 from hastur.dice_utils.RollResultMessage import RollResultEmbedFactory, RollResultMessage
 from hastur.dice_utils.roll_strategies.RollStrategy import RollStrategy
 from hastur.dice_utils.GameEnum import GamesEnum
@@ -20,5 +22,5 @@ class RollManager:
             self.roll_strategy.set_author(author)
             return self.roll_strategy.get_roll_message()
         except Exception as e:
-            logging.warn(e)
-            return [discord.Embed(title="EMPTY", description="Something went wrong")]
+            logging.error(e)
+            return [discord.Embed(title="EMPTY", description="Wystąpił niezydentyfikowany problem")]

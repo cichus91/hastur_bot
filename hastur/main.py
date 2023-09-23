@@ -3,11 +3,13 @@ import logging
 import os
 
 import discord
+import discord.ext.commands
 import dotenv
 
 from dice_utils.Dice import StandardDice
 from discord.ext import commands
 from enum import Enum
+
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -25,14 +27,10 @@ async def on_ready():
 async def on_command_error(ctx, error):
     logging.error(error)
     logging.error(type(error))
-    await ctx.send("Something went wrong")
-
-# @bot.event
-# async def on_command_error(ctx, error):
-#     if isinstance(error, commands.CommandNotFound):
-#         await ctx.send("Podano błędną komendę")
-#     elif isinstance(error, commands.MissingRequiredArgument):
-#         await ctx.send("Podano błędną wartość")
+    if isinstance(error, discord.ext.commands.UserInputError):
+        await ctx.send(embed=discord.Embed(title="ERORR", description="Podano błędną wartość"))
+    else:
+        await ctx.send("Something went wrong")
 
 
 async def load_cogs() -> None:

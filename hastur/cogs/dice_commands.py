@@ -4,7 +4,7 @@ import discord
 from enum import Enum
 from discord import Colour
 from discord.ext import commands
-from discord.ext.commands import MissingRequiredArgument
+from discord.ext.commands import MissingRequiredArgument, BadArgument
 from hastur.dice_utils.RollController import RollController
 
 
@@ -28,13 +28,16 @@ class RpgCommands(commands.Cog):
 
 
     @commands.command(name="roll")
-    async def standard_roll(self, ctx, dice_amount=1, dice_type=6):
-        roll_result_message = self.roll_controller.get_roll_message(dice_amount=dice_amount,
-                                                              dice_type=dice_type,
-                                                              author=ctx.author.display_name,
-                                                              game=self.game)
-        for result_embed in roll_result_message:
-            await ctx.send(embed=result_embed)
+    async def standard_roll(self, ctx, dice_amount: int=1, dice_type: int=6):
+        try:
+            roll_result_message = self.roll_controller.get_roll_message(dice_amount=dice_amount,
+                                                                  dice_type=dice_type,
+                                                                  author=ctx.author.display_name,
+                                                                  game=self.game)
+            for result_embed in roll_result_message:
+                await ctx.send(embed=result_embed)
+        except BadArgument as ba:
+            await ctx.send(discord.Embed(title="EMPTY", description="Podano błędną wartość"))
 
 
     @commands.command(name="set_game")
