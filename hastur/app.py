@@ -31,8 +31,6 @@ class HasturBot(commands.Bot):
         self._logger.info(f'Bot {self.user.name} ready to work!')
         await self.change_presence(activity=discord.Game("No game loaded!"))
 
-    async def on_command_error(
-        self, ctx: commands.context.Context[commands.bot.BotT], err: commands.errors.CommandError
-    ) -> None:
+    async def on_command_error(self, ctx, err) -> None:
         self._logger.error(f"Command error - {type(err)}: {err}")
         await ctx.send("Something went wrong")

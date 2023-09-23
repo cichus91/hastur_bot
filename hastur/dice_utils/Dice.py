@@ -48,11 +48,12 @@ class StandardDice(Dice):
 @dataclass
 class SpecialityDice(Dice):
 
-    values_range:list = field(default_factory=list)
+    values_range: list = field(default_factory=list)
 
     def roll(self):
         try:
             roll_result = random.choice(self.values_range)
+            return roll_result
         except Exception as e:
             print(f"Something gone wrong! Raise {e}")
 
