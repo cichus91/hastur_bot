@@ -1,43 +1,52 @@
-import datetime
-from typing import Optional, Union, Any
+import logging
+
 import discord
-from enum import Enum
-from discord import Colour
 from discord.ext import commands
-from discord.ext.commands import MissingRequiredArgument, BadArgument
-from hastur.dice_utils.RollController import RollController
+from discord.ext.commands import BadArgument, Context
+
+from hastur.dice_utils.RollContext import RollContext
 
 
 class RpgCommands(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.game = "Standard"
-        self.roll_controller = RollController()
+        self._roll_ctx = RollContext()
 
     @commands.command(name="roll")
-    async def standard_roll(self, ctx, dice_amount: int=1, dice_type: int=6):
+    async def roll(self, ctx: Context, dice_amount: int=1, dice_type: int=6):
         try:
-            roll_result_message = self.roll_controller.get_roll_message(dice_amount=dice_amount,
-                                                                  dice_type=dice_type,
-                                                                  author=ctx.author.display_name,
-                                                                  game=self.game)
-            for result_embed in roll_result_message:
+            roll_parameters = (dice_amount, dice_type)
+            for result_embed in self._get_roll_result(ctx, roll_parameters):
                 await ctx.send(embed=result_embed)
         except BadArgument as ba:
             await ctx.send(discord.Embed(title="EMPTY", description="Podano błędną wartość"))
 
+    def _get_roll_result(self, ctx: Context, roll_parameters: tuple):
+        author, guild = self._author_and_guild_from_ctx(ctx)
+        strategy = self._roll_ctx.get_strategy(author, guild)
+        try:
+            strategy.set_roll_parameters(roll_parameters).set_author(author)
+            return strategy.get_roll_message()
+        except Exception as e:
+            logging.error(e)
+            return [discord.Embed(title="EMPTY", description="Wystąpił niezydentyfikowany problem")]
+
     @commands.command(name="set_game")
-    async def dice_settings(self, ctx, game_name):
-        response = self.roll_controller.set_game(game_name)
-        self.game = response.get("game")
-        await ctx.send(response.get("message"))
+    async def dice_settings(self, ctx: Context, game: str):
+        author, guild = self._author_and_guild_from_ctx(ctx)
+        success, strategy = self._roll_ctx.set_strategy(author, guild, game)
+        if not success:
+            ctx.send(f"Nie znaleziono gry!!! Nie zmieniono z {strategy.NAME}")
+        await ctx.send(f"Gra zmieniona na {strategy.NAME}")
 
     @commands.command(name="check")
-    async def check_settings(self, ctx):
-        await ctx.send(f"{self.game}")
+    async def check_settings(self, ctx: Context):
+        author, guild = self._author_and_guild_from_ctx(ctx)
+        strategy = self._roll_ctx.get_strategy(author, guild)
+        await ctx.send(f"{strategy.NAME}")
 
-
-async def setup(bot):
-    await bot.add_cog(RpgCommands(bot))
-
+    @staticmethod
+    def _author_and_guild_from_ctx(ctx: Context):
+        msg = ctx.message
+        return msg.author, msg.guild

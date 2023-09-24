@@ -1,26 +1,35 @@
-from enum import Enum
+from collections import defaultdict
+from typing import Optional, Union
 
+from discord import Guild, Member, User
+
+from hastur.dice_utils.roll_strategies import STRATEGIES_CLS_BY_CMD_NAME
 from hastur.dice_utils.roll_strategies.RollStrategy import RollStrategy
-from hastur.dice_utils.roll_strategies.TrophyDarkStrategy import TrophyDarkStrategy
 from hastur.dice_utils.roll_strategies.StandardRollStrategy import StandardRollStrategy
 
 """Klasa zarządzająca kontekstem roll. Umożliwia wybranie odpowiedniego trybu, zgodnie z wyborem gry
 z dużą dozą prawdopodobieństa do zamiany/rozbudowy w zależności od wyglądu innych serwisów"""
 
 
-class RollContext:
+class RollContext(object):
 
-    def match_roll_strategy(self, game) -> RollStrategy:
-        match game:
-            case GamesEnum.TROPHY_DARK.value:
-                return TrophyDarkStrategy()
-            case GamesEnum.STANDARD.value:
-                return StandardRollStrategy()
-            case _:
-                return StandardRollStrategy()
+    def __init__(self) -> None:
+        self._game_by_user = defaultdict(lambda: STRATEGIES_CLS_BY_CMD_NAME[StandardRollStrategy.CMD_NAME]())
 
-class GamesEnum(Enum):
-    TROPHY_DARK = "Trophy Dark"
-    BLADES_IN_THE_DARK = "Blades in the Dark"
-    BRINDLEWOOD_BAY = "Brindlewood Bay"
-    STANDARD = "Standard"
+    def get_strategy(self, user: Union[Member, User], guild: Optional[Guild]) -> RollStrategy:
+        # defaultdict will set standard roll by default if no game set
+        return self._game_by_user[self._game_key_from_msg(user, guild)]
+
+    def set_strategy(self, user: Union[Member, User], guild: Optional[Guild], game: str) -> (bool, RollStrategy):
+        if game not in STRATEGIES_CLS_BY_CMD_NAME:
+            return False, self._game_by_user[self._game_key_from_msg(user, guild)]
+        strategy = STRATEGIES_CLS_BY_CMD_NAME[game]()
+        self._game_by_user[self._game_key_from_msg(user, guild)] = strategy
+        return True, strategy
+
+    @staticmethod
+    def _game_key_from_msg(user: Union[Member, User], guild: Optional[Guild]) -> (int, int):
+        guild_id = None
+        if guild is not None:
+            guild_id = guild.id
+        return (guild_id, user.id)

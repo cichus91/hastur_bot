@@ -11,6 +11,9 @@ from hastur.dice_utils.rol_rules.RollRule import RollRule, RiskRoll
 
 class TrophyDarkStrategy(RollStrategy):
 
+    NAME = "Trophy Dark"
+    CMD_NAME = "trophy"
+
     def __init__(self):
         super().__init__()
         self.dice = StandardDice(min_value=1, max_value=6)

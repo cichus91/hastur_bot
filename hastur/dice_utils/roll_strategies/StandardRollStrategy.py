@@ -9,6 +9,9 @@ from hastur.dice_utils.model.RollResult import RollResult
 
 class StandardRollStrategy(RollStrategy):
 
+    NAME = "Standard"
+    CMD_NAME = "standard"
+
     def get_roll_message(self):
         embeds = list()
         dice_embed = self.dice_embed().to_embed()
