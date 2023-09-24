@@ -8,7 +8,12 @@ todo zrobienie wersji obsługującej JSON
 
 class RollStrategy(ABC):
 
+    NAME = None
+    CMD_NAME = None
+
     def __init__(self):
+        assert self.NAME is not None, f"NAME has to be set for {self.__class__.__name__}"
+        assert self.CMD_NAME is not None, f"CMD_NAME has to be set for {self.__class__.__name__}"
         self.roll_result_message = RollResultMessage()
         self.roll_parameters = tuple()
         self.author = ''
