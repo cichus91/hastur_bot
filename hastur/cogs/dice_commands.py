@@ -46,6 +46,11 @@ class RpgCommands(commands.Cog):
         strategy = self._roll_ctx.get_strategy(author, guild)
         await ctx.send(f"{strategy.NAME}")
 
+    @commands.command(name="list_games")
+    async def list_games(self, ctx: Context):
+        sorted_games = sorted(self._roll_ctx.GAME_NAMES_BY_CMD.items(), key=lambda k_v: k_v[0])
+        await ctx.send("\n".join({f"* `{cmd_name}`: {game}" for cmd_name, game in sorted_games}))
+
     @staticmethod
     def _author_and_guild_from_ctx(ctx: Context):
         msg = ctx.message

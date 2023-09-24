@@ -13,6 +13,8 @@ z dużą dozą prawdopodobieństa do zamiany/rozbudowy w zależności od wygląd
 
 class RollContext(object):
 
+    GAME_NAMES_BY_CMD = {cmd_name: strategy_cls.NAME for cmd_name, strategy_cls in STRATEGIES_CLS_BY_CMD_NAME.items()}
+
     def __init__(self) -> None:
         self._game_by_user = defaultdict(lambda: STRATEGIES_CLS_BY_CMD_NAME[StandardRollStrategy.CMD_NAME]())
 
