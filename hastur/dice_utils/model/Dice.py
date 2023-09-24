@@ -3,8 +3,6 @@ from abc import ABC, abstractmethod
 from enum import Enum
 from dataclasses import dataclass, field
 
-from hastur.dice_utils.DiceException import DiceException
-
 """
 Klasy odpowiedzialne za tworzenie obiektów kości.
 """
@@ -39,11 +37,9 @@ class StandardDice(Dice):
         self._max_value = max(1, value)
 
     def roll(self) -> int:
-        try:
-            roll_result = int(random.randint(self.min_value, self.max_value))
-            return roll_result
-        except Exception:
-            raise DiceException().rise_wrong_values_range_exception()
+        roll_result = int(random.randint(self.min_value, self.max_value))
+        return roll_result
+
 
 @dataclass
 class SpecialityDice(Dice):
@@ -51,11 +47,8 @@ class SpecialityDice(Dice):
     values_range: list = field(default_factory=list)
 
     def roll(self):
-        try:
-            roll_result = random.choice(self.values_range)
-            return roll_result
-        except Exception as e:
-            print(f"Something gone wrong! Raise {e}")
+        roll_result = random.choice(self.values_range)
+        return roll_result
 
 
 class DiceType(Enum):

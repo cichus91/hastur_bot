@@ -1,10 +1,8 @@
 import discord
 import logging
 
-from discord.ext.commands import BadArgument
-from hastur.dice_utils.RollResultMessage import RollResultEmbedFactory, RollResultMessage
+from hastur.dice_utils.model.RollResultMessage import RollResultMessage
 from hastur.dice_utils.roll_strategies.RollStrategy import RollStrategy
-from hastur.dice_utils.GameEnum import GamesEnum
 
 """
 Klasa obsługująca strategię, pozwalająca na stworzenie wysyłanej przez bota wiadomości.

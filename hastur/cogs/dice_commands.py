@@ -8,24 +8,12 @@ from discord.ext.commands import MissingRequiredArgument, BadArgument
 from hastur.dice_utils.RollController import RollController
 
 
-# class DiceButton(discord.ui.Button):
-#
-#     def setup(self, data):
-#         self.label = data['label']
-#         self.custom_id = data['custom_id']
-#         self.style = data['style']
-#
-#     async def callback(self, interaction: discord.Interaction):
-#         await self.view.roll_dice(interaction)
-
-
 class RpgCommands(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
         self.game = "Standard"
         self.roll_controller = RollController()
-
 
     @commands.command(name="roll")
     async def standard_roll(self, ctx, dice_amount: int=1, dice_type: int=6):
@@ -38,7 +26,6 @@ class RpgCommands(commands.Cog):
                 await ctx.send(embed=result_embed)
         except BadArgument as ba:
             await ctx.send(discord.Embed(title="EMPTY", description="Podano błędną wartość"))
-
 
     @commands.command(name="set_game")
     async def dice_settings(self, ctx, game_name):

@@ -1,11 +1,10 @@
 import discord
-from typing import Tuple, List
+from typing import List
 
-from hastur.dice_utils.Dice import StandardDice
-from hastur.dice_utils.RollResultMessage import RollResultEmbedFactory, RollResultEmbed, RollResultMessage
-from hastur.dice_utils.RollRule import RollRule
+from hastur.dice_utils.model.Dice import StandardDice
+from hastur.dice_utils.model.RollResultMessage import RollResultEmbedFactory
 from hastur.dice_utils.roll_strategies.RollStrategy import RollStrategy
-from hastur.dice_utils.RollResult import RollResultBuilder, RollResult
+from hastur.dice_utils.model.RollResult import RollResult
 
 
 class StandardRollStrategy(RollStrategy):

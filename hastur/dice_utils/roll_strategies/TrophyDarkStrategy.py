@@ -1,12 +1,12 @@
 import logging
 
 import discord
-from typing import Tuple, List
-from hastur.dice_utils.RollResultMessage import RollResultEmbedFactory, RollResultEmbed, RollResultMessage
+from typing import List
+from hastur.dice_utils.model.RollResultMessage import RollResultEmbedFactory
 from hastur.dice_utils.roll_strategies.RollStrategy import RollStrategy
-from hastur.dice_utils.RollResult import RollResultBuilder, RollResult
-from hastur.dice_utils.Dice import StandardDice
-from hastur.dice_utils.RollRule import RollRule
+from hastur.dice_utils.model.RollResult import RollResult
+from hastur.dice_utils.model.Dice import StandardDice
+from hastur.dice_utils.rol_rules.RollRule import RollRule, RiskRoll
 
 
 class TrophyDarkStrategy(RollStrategy):
@@ -57,14 +57,3 @@ class TrophyDarkStrategy(RollStrategy):
         roll_rule = roll_rule
         roll_result.set_result(roll_rule)
 
-
-class RiskRoll(RollRule):
-
-    #todo wydzielic do osobnego pliku
-    def check(self) -> RollResult.Result:
-        if self.roll_result == 6:
-            return RollResult.Result.SUCCESS.value
-        elif self.roll_result in (4, 5):
-            return RollResult.Result.WEAK_SUCCESS.value
-        else:
-            return RollResult.Result.FAILURE.value

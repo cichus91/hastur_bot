@@ -1,5 +1,4 @@
-from hastur.dice_utils.RollResultMessage import RollResultMessage, RollResultEmbed
-from typing import Tuple
+from hastur.dice_utils.model.RollResultMessage import RollResultMessage, RollResultEmbed
 from abc import ABC, abstractmethod
 
 """Szablon do tworzenia nowych klas zasad dla kolejnych gier

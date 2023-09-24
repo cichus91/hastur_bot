@@ -1,9 +1,11 @@
+from enum import Enum
+
 from hastur.dice_utils.roll_strategies.RollStrategy import RollStrategy
 from hastur.dice_utils.roll_strategies.TrophyDarkStrategy import TrophyDarkStrategy
-from hastur.dice_utils.GameEnum import GamesEnum
 from hastur.dice_utils.roll_strategies.StandardRollStrategy import StandardRollStrategy
 
-"""Klasa zarządzająca kontekstem roll. Umożliwia wybranie odpowiedniego trybu, zgodnie z wyborem gry"""
+"""Klasa zarządzająca kontekstem roll. Umożliwia wybranie odpowiedniego trybu, zgodnie z wyborem gry
+z dużą dozą prawdopodobieństa do zamiany/rozbudowy w zależności od wyglądu innych serwisów"""
 
 
 class RollContext:
@@ -16,3 +18,9 @@ class RollContext:
                 return StandardRollStrategy()
             case _:
                 return StandardRollStrategy()
+
+class GamesEnum(Enum):
+    TROPHY_DARK = "Trophy Dark"
+    BLADES_IN_THE_DARK = "Blades in the Dark"
+    BRINDLEWOOD_BAY = "Brindlewood Bay"
+    STANDARD = "Standard"

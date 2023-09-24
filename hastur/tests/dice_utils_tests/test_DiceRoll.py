@@ -1,8 +1,7 @@
 import random
 import pytest
 
-from hastur.dice_utils.Dice import StandardDice
-from hastur.dice_utils.DiceException import DiceException
+from hastur.dice_utils.model.Dice import StandardDice
 """
 Standard Dice tests
 """
@@ -37,11 +36,6 @@ def test_standard_dice_roll_with_proper_values():
     dice = StandardDice(1, 10)
 
     assert dice.roll() in range(1, 11)
-
-def test_standard_roll_rise_wrong_value_exception():
-
-    with pytest.raises(DiceException, match = "Wrong range values was given!"):
-        dice = StandardDice(4, 2)
 """
 Special Dice tests
 """
