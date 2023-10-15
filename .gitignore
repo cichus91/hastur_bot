@@ -6,6 +6,10 @@
 __pycache__/
 *.py[cod]
 
+# Config
+*.ini
+*.cfg
+
 # Logs
 *.log
 
